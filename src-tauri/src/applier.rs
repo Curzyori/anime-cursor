@@ -63,7 +63,7 @@ pub fn apply_cursor_variant(ani_path_str: &str) -> Result<(), String> {
     #[cfg(target_os = "windows")]
     {
         // 1. Copy selected .ani to AppData active directory
-        let active_dir = get_app_dir().join("active");
+        let active_dir = crate::pack::get_app_dir().join("active");
         fs::create_dir_all(&active_dir).map_err(|e| e.to_string())?;
 
         let target_ani_path = active_dir.join("active_cursor.ani");
