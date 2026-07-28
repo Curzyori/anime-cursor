@@ -1,6 +1,4 @@
-<p align="center">
-  <a href="https://raw.githubusercontent.com/Curzyori/anime-cursor/main/images/demo.mp4">▶️ Watch demo video</a>
-</p>
+https://github.com/user-attachments/assets/6bcdc8f4-6b75-4bfb-a7d0-7de54b747782
 
 <p align="center"><img src="images/logo.svg" width="120" alt="Anime Cursor Logo" /></p>
 
