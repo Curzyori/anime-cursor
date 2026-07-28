@@ -1,7 +1,5 @@
 <p align="center">
-  <video src="https://raw.githubusercontent.com/Curzyori/anime-cursor/main/images/demo.mp4" width="600" controls muted loop autoplay>
-    <a href="https://raw.githubusercontent.com/Curzyori/anime-cursor/main/images/demo.mp4">观看演示视频</a>
-  </video>
+  <a href="https://raw.githubusercontent.com/Curzyori/anime-cursor/main/images/demo.mp4">▶️ 观看演示视频</a>
 </p>
 
 <p align="center"><img src="images/logo.svg" width="120" alt="Anime Cursor 标志" /></p>
