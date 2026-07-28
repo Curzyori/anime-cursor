@@ -1,0 +1,19 @@
+{
+  "name": "Minji - NewJeans Powerpuff Girls",
+  "author": "josuegrotesco",
+  "source_url": null,
+  "cursors": [
+    {
+      "filename": "Minji - NewJeans Powerpuff Girls_256.ani",
+      "size_label": "256"
+    },
+    {
+      "filename": "Minji - NewJeans Powerpuff Girls_32-48-64.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "Minji - NewJeans Powerpuff Girls_72-96-128.ani",
+      "size_label": "72-96-128"
+    }
+  ]
+}

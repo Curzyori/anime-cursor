@@ -1,0 +1,15 @@
+{
+  "identifier": "default",
+  "description": "Default capabilities for Anime Cursor",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "shell:allow-open",
+    "dialog:default",
+    "allow-list-packs",
+    "allow-import-pack",
+    "allow-apply-cursor",
+    "allow-restore-default-cursor",
+    "allow-remove-pack"
+  ]
+}

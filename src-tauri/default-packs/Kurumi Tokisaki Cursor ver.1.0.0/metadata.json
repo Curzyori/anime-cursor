@@ -1,0 +1,75 @@
+{
+  "name": "Kurumi Tokisaki",
+  "author": "EbiEbiBeam",
+  "source_url": null,
+  "cursors": [
+    {
+      "filename": "01-Normal.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "02-Link.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "03-Loading.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "04-Help.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "05-Text Select Alt.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "05-Text Select.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "06-Handwriting.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "07-Precision.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "08-Unavailable.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "09-Location Select.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "10-Person Select.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "11-Vertical Resize.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "12-Horizontal Resize.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "13-Diagonal Resize 1.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "14-Diagonal Resize 2.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "15-Move.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "16-Alternate Select.ani",
+      "size_label": "32-48-64"
+    }
+  ]
+}

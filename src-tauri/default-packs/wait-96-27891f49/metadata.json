@@ -1,0 +1,15 @@
+{
+  "name": "Wait Cursor",
+  "author": "supermariofps",
+  "source_url": null,
+  "cursors": [
+    {
+      "filename": "Wait_96_32-48-64.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "Wait_96_96.ani",
+      "size_label": "96"
+    }
+  ]
+}

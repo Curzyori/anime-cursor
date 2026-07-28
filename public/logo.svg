@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Pink-Purple Anime Gradient -->
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B9D" />
+      <stop offset="100%" stop-color="#C44AFF" />
+    </linearGradient>
+
+    <!-- Drop Shadow for floating elements -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F0F23" flood-opacity="0.3"/>
+    </filter>
+    <filter id="lightShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F0F23" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Base Canvas / Rounded Rect -->
+  <rect width="512" height="512" rx="96" fill="url(#brandGradient)" />
+
+  <!-- Anime Girl Silhouette (Cat-ear bust) -->
+  <g filter="url(#shadow)" fill="#FFFFFF">
+    <!-- Bust & Head -->
+    <path d="M256,150 C190,150 140,200 140,260 C140,300 165,330 185,345 C150,390 100,430 100,512 L412,512 C412,430 362,390 327,345 C347,330 372,300 372,260 C372,200 322,150 256,150 Z" />
+    <!-- Left Ear -->
+    <path d="M165,185 L125,95 L225,165 Z" />
+    <!-- Right Ear -->
+    <path d="M347,185 L387,95 L287,165 Z" />
+  </g>
+
+  <!-- Sparkle Dots -->
+  <g fill="#FFFFFF" opacity="0.9">
+    <path d="M110,110 Q110,140 140,140 Q110,140 110,170 Q110,140 80,140 Q110,140 110,110 Z" filter="url(#lightShadow)"/>
+    <path d="M430,380 Q430,410 460,410 Q430,410 430,440 Q430,410 400,410 Q430,410 430,380 Z" filter="url(#lightShadow)"/>
+    <path d="M130,370 Q130,385 145,385 Q130,385 130,400 Q130,385 115,385 Q130,385 130,370 Z" filter="url(#lightShadow)"/>
+    <path d="M240,70 Q240,90 260,90 Q240,90 240,110 Q240,90 220,90 Q240,90 240,70 Z" filter="url(#lightShadow)"/>
+  </g>
+
+  <!-- Cursor Pointer Overlay -->
+  <path d="M 330 60 L 330 220 L 358 191 L 386 255 L 410 244 L 382 180 L 433 180 Z"
+        fill="#0F0F23" stroke="#FFFFFF" stroke-width="10" stroke-linejoin="round" filter="url(#shadow)"/>
+</svg>

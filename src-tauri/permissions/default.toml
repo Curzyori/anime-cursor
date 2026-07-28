@@ -1,0 +1,24 @@
+[[permission]]
+identifier = "allow-list-packs"
+description = "Allow list_packs command"
+commands.allow = ["list_packs"]
+
+[[permission]]
+identifier = "allow-import-pack"
+description = "Allow import_pack command"
+commands.allow = ["import_pack"]
+
+[[permission]]
+identifier = "allow-apply-cursor"
+description = "Allow apply_cursor command"
+commands.allow = ["apply_cursor"]
+
+[[permission]]
+identifier = "allow-restore-default-cursor"
+description = "Allow restore_default_cursor command"
+commands.allow = ["restore_default_cursor"]
+
+[[permission]]
+identifier = "allow-remove-pack"
+description = "Allow remove_pack command"
+commands.allow = ["remove_pack"]

@@ -1,0 +1,19 @@
+{
+  "name": "Madoka Magica - Miki Sayaka",
+  "author": "Unknown",
+  "source_url": null,
+  "cursors": [
+    {
+      "filename": "Madoka Magica - Miki Sayaka - Puella Magi Madoka M_256.ani",
+      "size_label": "256"
+    },
+    {
+      "filename": "Madoka Magica - Miki Sayaka - Puella Magi Madoka M_32-48-64.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "Madoka Magica - Miki Sayaka - Puella Magi Madoka M_72-96-128.ani",
+      "size_label": "72-96-128"
+    }
+  ]
+}

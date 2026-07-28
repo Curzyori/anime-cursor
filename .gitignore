@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# tauri build artifacts
+src-tauri/target/
+
+# env
+.env
+.env.*
+!.env.example
+
+# typescript build info / generated files
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.js
+
+# IDE / editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# os
+.DS_Store
+Thumbs.db
+
+# planning / hermes (local only)
+.planning/
+.hermes/
+graphify/
+graphify-out/
+task.md
+plan.md
+summary.md
+test-plan.md
+test-report.md

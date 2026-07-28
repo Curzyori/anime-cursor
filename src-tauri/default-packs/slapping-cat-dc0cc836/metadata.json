@@ -1,0 +1,19 @@
+{
+  "name": "Slapping Cat",
+  "author": "Unknown",
+  "source_url": null,
+  "cursors": [
+    {
+      "filename": "slapping cat_200.ani",
+      "size_label": "200"
+    },
+    {
+      "filename": "slapping cat_32-48-64.ani",
+      "size_label": "32-48-64"
+    },
+    {
+      "filename": "slapping cat_72-96-128.ani",
+      "size_label": "72-96-128"
+    }
+  ]
+}
