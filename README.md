@@ -1,6 +1,6 @@
 <p align="center">
-  <video src="images/demo.mp4" width="600" controls muted loop autoplay>
-    <a href="images/demo.mp4">Watch demo video</a>
+  <video src="https://raw.githubusercontent.com/Curzyori/anime-cursor/main/images/demo.mp4" width="600" controls muted loop autoplay>
+    <a href="https://raw.githubusercontent.com/Curzyori/anime-cursor/main/images/demo.mp4">Watch demo video</a>
   </video>
 </p>
 
