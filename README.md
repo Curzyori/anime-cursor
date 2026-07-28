@@ -107,12 +107,34 @@ anime-cursor/
 
 ## <a id="quick-start"></a>🚀 Quick Start
 
-Download the latest release (recommended):
+Download the latest release from [Releases](https://github.com/Curzyori/anime-cursor/releases).
 
-<a href="https://github.com/Curzyori/anime-cursor/releases">Download Anime Cursor →</a>
+### Available Formats
 
-Supports .deb (Debian/Ubuntu), .rpm (Fedora), and .AppImage (all Linux).
+| Platform | Format | When to Use |
+|----------|--------|------------|
+| **Linux** (Debian/Ubuntu) | `.deb` | Double-click to install |
+| **Linux** (Fedora/RHEL) | `.rpm` | Double-click to install |
+| **Linux** (any distro) | `.AppImage` | No install needed — chmod +x & run |
+| **Windows** 10+ | `.msi` | Double-click to install |
 
+### System Requirements
+
+| | Minimum | Recommended |
+|--|---------|-------------|
+| **CPU** | 2 cores | 4+ cores |
+| **RAM** | 512 MB | 2 GB+ |
+| **Storage** | 150 MB | 500 MB |
+| **OS** | Windows 10 / Linux (GNOME, KDE, XFCE) | Windows 11 / Linux latest |
+
+### Quick Install (Linux AppImage)
+
+```bash
+chmod +x Anime\ Cursor_*_amd64.AppImage
+./Anime\ Cursor_*_amd64.AppImage
+```
+
+<div class="language-sh"></div>
 ## <a id="installation"></a>📦 Installation
 
 Build from source (Node 18+):

@@ -109,14 +109,36 @@ anime-cursor/
 └── tauri.conf.json
 ```
 
-## <a id="quick-start"></a>🚀 快速开始
+## <a id="quick-start"></a>🚀 Quick Start
 
-下载最新版本（推荐）：
+Download the latest release from [Releases](https://github.com/Curzyori/anime-cursor/releases).
 
-<a href="https://github.com/Curzyori/anime-cursor/releases">下载 Anime Cursor →</a>
+### Available Formats
 
-支持 .deb (Debian/Ubuntu)，.rpm (Fedora)，和 .AppImage (全部 Linux)。
+| Platform | Format | When to Use |
+|----------|--------|------------|
+| **Linux** (Debian/Ubuntu) | `.deb` | Double-click to install |
+| **Linux** (Fedora/RHEL) | `.rpm` | Double-click to install |
+| **Linux** (any distro) | `.AppImage` | No install needed — chmod +x & run |
+| **Windows** 10+ | `.msi` | Double-click to install |
 
+### System Requirements
+
+| | Minimum | Recommended |
+|--|---------|-------------|
+| **CPU** | 2 cores | 4+ cores |
+| **RAM** | 512 MB | 2 GB+ |
+| **Storage** | 150 MB | 500 MB |
+| **OS** | Windows 10 / Linux (GNOME, KDE, XFCE) | Windows 11 / Linux latest |
+
+### Quick Install (Linux AppImage)
+
+```bash
+chmod +x Anime\ Cursor_*_amd64.AppImage
+./Anime\ Cursor_*_amd64.AppImage
+```
+
+<div class="language-sh"></div>
 ## <a id="installation"></a>📦 安装
 
 从源码构建 (Node 18+)：
