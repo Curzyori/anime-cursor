@@ -138,7 +138,6 @@ chmod +x Anime\ Cursor_*_amd64.AppImage
 ./Anime\ Cursor_*_amd64.AppImage
 ```
 
-<div class="language-sh"></div>
 ## <a id="installation"></a>📦 安装
 
 从源码构建 (Node 18+)：

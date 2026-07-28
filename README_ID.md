@@ -138,7 +138,6 @@ chmod +x Anime\ Cursor_*_amd64.AppImage
 ./Anime\ Cursor_*_amd64.AppImage
 ```
 
-<div class="language-sh"></div>
 ## <a id="installation"></a>📦 Instalasi
 
 Build dari source (Node 18+):
