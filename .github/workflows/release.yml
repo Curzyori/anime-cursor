@@ -19,11 +19,11 @@ jobs:
             librsvg2-dev patchelf
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - uses: dtolnay/rust-toolchain@stable
       - run: npm ci
-      - run: npm run tauri build
+      - run: npx tauri build
       - name: Upload Linux bundles
         uses: softprops/action-gh-release@v2
         with:
@@ -39,15 +39,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - uses: dtolnay/rust-toolchain@stable
-      - name: System deps (WebView2)
-        run: |
-          npx @tauri-apps/cli setup
-        shell: pwsh
       - run: npm ci
-      - run: npm run tauri build
+      - run: npx tauri build
       - name: Upload Windows bundle
         uses: softprops/action-gh-release@v2
         with:
