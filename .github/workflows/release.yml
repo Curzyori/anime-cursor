@@ -60,15 +60,15 @@ jobs:
         run: |
           for img in src-tauri/target/release/bundle/appimage/*.AppImage; do
             [ -e "$img" ] || { echo "ERROR: no AppImage found" >&2; exit 1; }
-            rm -rf .verify-root
+            rm -rf squashfs-root
             "$img" --appimage-extract > /dev/null
-            BAD=$(find .verify-root \( -name 'AppRun*' -o -path './usr/bin/*' \) -type f ! -perm -005)
+            BAD=$(find squashfs-root \( -name 'AppRun*' -o -path './usr/bin/*' \) -type f ! -perm -005)
             if [ -n "$BAD" ]; then
               echo "FAIL: files missing world-executable bit in $img:"
               echo "$BAD"
               exit 1
             fi
-            rm -rf .verify-root
+            rm -rf squashfs-root
             echo "OK: $img executables are world-executable"
           done
       - name: Upload Linux bundles
