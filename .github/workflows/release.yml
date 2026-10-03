@@ -10,7 +10,9 @@ permissions:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-latest
+    # 22.04 on purpose: glibc 2.35 keeps the AppImage portable to older distros
+    # (ubuntu-latest = 24.04 → glibc 2.39, katalog AppImage menandai not self-contained)
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: System deps
@@ -26,7 +28,49 @@ jobs:
           cache: npm
       - uses: dtolnay/rust-toolchain@stable
       - run: npm ci
-      - run: npx tauri build
+      - name: Build Tauri bundles
+        run: |
+          # guard: files must stay world-readable/executable inside the AppImage
+          # (V1.0.0 shipped AppRun.wrapped as 770 → firejail "Permission denied")
+          umask 022
+          npx tauri build
+      - name: Repack AppImage with safe permissions
+        run: |
+          curl -sL -o appimagetool.AppImage \
+            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x appimagetool.AppImage
+          ./appimagetool.AppImage --appimage-extract > /dev/null
+          mv squashfs-root appimagetool-dir
+          TOOL="appimagetool-dir/AppRun"
+          for img in src-tauri/target/release/bundle/appimage/*.AppImage; do
+            [ -e "$img" ] || { echo "ERROR: no AppImage found" >&2; exit 1; }
+            echo "Repacking: $img"
+            rm -rf .repack-root
+            "$img" --appimage-extract > /dev/null
+            mv squashfs-root .repack-root
+            if [ -f .repack-root/AppRun ]; then chmod 755 .repack-root/AppRun; fi
+            if [ -f .repack-root/AppRun.wrapped ]; then chmod 755 .repack-root/AppRun.wrapped; fi
+            if [ -d .repack-root/usr/bin ]; then
+              find .repack-root/usr/bin -maxdepth 1 -type f -exec chmod 755 {} +
+            fi
+            ARCH=x86_64 "$TOOL" .repack-root "$(basename "$img")"
+            mv "$(basename "$img")" "$img"
+          done
+      - name: Verify AppImage permissions
+        run: |
+          for img in src-tauri/target/release/bundle/appimage/*.AppImage; do
+            [ -e "$img" ] || { echo "ERROR: no AppImage found" >&2; exit 1; }
+            rm -rf .verify-root
+            "$img" --appimage-extract > /dev/null
+            BAD=$(find .verify-root \( -name 'AppRun*' -o -path './usr/bin/*' \) -type f ! -perm -005)
+            if [ -n "$BAD" ]; then
+              echo "FAIL: files missing world-executable bit in $img:"
+              echo "$BAD"
+              exit 1
+            fi
+            rm -rf .verify-root
+            echo "OK: $img executables are world-executable"
+          done
       - name: Upload Linux bundles
         uses: softprops/action-gh-release@v2
         with:
