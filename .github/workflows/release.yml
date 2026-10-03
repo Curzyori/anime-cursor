@@ -21,7 +21,7 @@ jobs:
           sudo apt install -y \
             libwebkit2gtk-4.1-dev libxdo-dev libayatana-appindicator3-dev \
             libgtk-3-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev \
-            librsvg2-dev patchelf
+            librsvg2-dev patchelf squashfs-tools
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -35,41 +35,56 @@ jobs:
           umask 022
           npx tauri build
       - name: Repack AppImage with safe permissions
+        # NOTE: deliberately NOT appimagetool — its AppDir staging forces every
+        # directory to 0700 in the squashfs. The catalog test harness runs apps
+        # through firejail as a normal user (files appear root:root), so 0700
+        # dirs make AppRun unrunnable: "Permission denied" despite 755 files.
+        # We rebuild the squashfs directly with mksquashfs (mode-faithful) and
+        # prepend the official AppImageKit runtime (xz-compatible).
         run: |
-          curl -sL -o appimagetool.AppImage \
-            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
-          chmod +x appimagetool.AppImage
-          ./appimagetool.AppImage --appimage-extract > /dev/null
-          mv squashfs-root appimagetool-dir
-          TOOL="appimagetool-dir/AppRun"
+          curl -sL -o runtime-x86_64 \
+            https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-x86_64
           for img in src-tauri/target/release/bundle/appimage/*.AppImage; do
             [ -e "$img" ] || { echo "ERROR: no AppImage found" >&2; exit 1; }
             echo "Repacking: $img"
             rm -rf .repack-root
             "$img" --appimage-extract > /dev/null
             mv squashfs-root .repack-root
-            if [ -f .repack-root/AppRun ]; then chmod 755 .repack-root/AppRun; fi
-            if [ -f .repack-root/AppRun.wrapped ]; then chmod 755 .repack-root/AppRun.wrapped; fi
+            # dirs: world-traversable; execs: world-executable; everything: world-readable
+            find .repack-root -type d -exec chmod 755 {} +
+            chmod 755 .repack-root/AppRun .repack-root/AppRun.wrapped 2>/dev/null || true
             if [ -d .repack-root/usr/bin ]; then
               find .repack-root/usr/bin -maxdepth 1 -type f -exec chmod 755 {} +
             fi
-            ARCH=x86_64 "$TOOL" .repack-root "$(basename "$img")"
-            mv "$(basename "$img")" "$img"
+            chmod -R a+rX .repack-root
+            SQ="$(mktemp --suffix=.img)"
+            mksquashfs .repack-root "$SQ" -root-owned -noappend -comp xz -quiet -no-progress
+            cat runtime-x86_64 "$SQ" > "$img"
+            rm -f "$SQ"
+            chmod +x "$img"
           done
       - name: Verify AppImage permissions
+        # Mirrors the catalog harness: firejail exposes files as root:root and
+        # runs the app as a normal user, so every dir needs o+x and AppRun needs
+        # o+rx. We check bits on ALL dirs/execs AND actually traverse as nobody.
         run: |
           for img in src-tauri/target/release/bundle/appimage/*.AppImage; do
             [ -e "$img" ] || { echo "ERROR: no AppImage found" >&2; exit 1; }
             rm -rf squashfs-root
             "$img" --appimage-extract > /dev/null
-            BAD=$(find squashfs-root \( -name 'AppRun*' -o -path './usr/bin/*' \) -type f ! -perm -005)
-            if [ -n "$BAD" ]; then
-              echo "FAIL: files missing world-executable bit in $img:"
-              echo "$BAD"
+            BAD_DIRS=$(find squashfs-root -type d ! -perm -005)
+            BAD_EXECS=$(find squashfs-root \( -name 'AppRun*' -o -path './usr/bin/*' \) -type f ! -perm -005)
+            if [ -n "$BAD_DIRS" ] || [ -n "$BAD_EXECS" ]; then
+              echo "FAIL: world-inaccessible entries in $img:"
+              echo "$BAD_DIRS $BAD_EXECS"
               exit 1
             fi
+            for f in AppRun AppRun.wrapped; do
+              sudo -u nobody test -r "squashfs-root/$f" || { echo "FAIL: nobody cannot read $f"; exit 1; }
+              sudo -u nobody test -x "squashfs-root/$f" || { echo "FAIL: nobody cannot execute $f"; exit 1; }
+            done
             rm -rf squashfs-root
-            echo "OK: $img executables are world-executable"
+            echo "OK: $img is world-traversable/executable (incl. nobody test)"
           done
       - name: Upload Linux bundles
         uses: softprops/action-gh-release@v2
