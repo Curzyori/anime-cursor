@@ -35,18 +35,18 @@ jobs:
           umask 022
           npx tauri build
       - name: Repack AppImage with safe permissions
-        # NOTE: deliberately NOT appimagetool — its AppDir staging forces every
-        # directory to 0700 in the squashfs. The catalog test harness runs apps
-        # through firejail as a normal user (files appear root:root), so 0700
-        # dirs make AppRun unrunnable: "Permission denied" despite 755 files.
-        # We rebuild the squashfs directly with mksquashfs (mode-faithful) and
-        # prepend the official AppImageKit runtime (xz-compatible).
+        # NOTE:
+        # 1. Do NOT use appimagetool — its AppDir staging forces every directory to 0700.
+        # 2. Do NOT use -comp xz — the appimage.github.io catalog test uses runtime-fuse2
+        #    which ONLY supports zlib and zstd (fails with "Squashfs image uses xz compression").
+        # 3. Do NOT replace the runtime with a generic 193KB runtime — slice the original
+        #    embedded runtime using its official `--appimage-offset` flag.
         run: |
-          curl -sL -o runtime-x86_64 \
-            https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-x86_64
           for img in src-tauri/target/release/bundle/appimage/*.AppImage; do
             [ -e "$img" ] || { echo "ERROR: no AppImage found" >&2; exit 1; }
             echo "Repacking: $img"
+            OFFSET=$("$img" --appimage-offset)
+            head -c "$OFFSET" "$img" > .orig-runtime
             rm -rf .repack-root
             "$img" --appimage-extract > /dev/null
             mv squashfs-root .repack-root
@@ -58,20 +58,22 @@ jobs:
             fi
             chmod -R a+rX .repack-root
             SQ="$(mktemp --suffix=.img)"
-            mksquashfs .repack-root "$SQ" -root-owned -noappend -comp xz -quiet -no-progress
-            cat runtime-x86_64 "$SQ" > "$img"
-            rm -f "$SQ"
+            mksquashfs .repack-root "$SQ" -root-owned -noappend -comp zstd -quiet -no-progress
+            cat .orig-runtime "$SQ" > "$img"
+            rm -f "$SQ" .orig-runtime
             chmod +x "$img"
           done
       - name: Verify AppImage permissions
-        # Mirrors the catalog harness: firejail exposes files as root:root and
-        # runs the app as a normal user, so every dir needs o+x and AppRun needs
-        # o+rx. We check bits on ALL dirs/execs AND actually traverse as nobody.
+        # Test against BOTH native extraction and the catalog's exact test runtime (runtime-fuse2)
         run: |
+          curl -sL -o runtime-fuse2-x86_64 \
+            https://github.com/AppImage/appimage.github.io/releases/download/deps/runtime-fuse2-x86_64
+          chmod +x runtime-fuse2-x86_64
           for img in src-tauri/target/release/bundle/appimage/*.AppImage; do
             [ -e "$img" ] || { echo "ERROR: no AppImage found" >&2; exit 1; }
+            echo "Verifying $img with catalog runtime..."
             rm -rf squashfs-root
-            "$img" --appimage-extract > /dev/null
+            TARGET_APPIMAGE="$img" ./runtime-fuse2-x86_64 --appimage-extract > /dev/null
             BAD_DIRS=$(find squashfs-root -type d ! -perm -005)
             BAD_EXECS=$(find squashfs-root \( -name 'AppRun*' -o -path './usr/bin/*' \) -type f ! -perm -005)
             if [ -n "$BAD_DIRS" ] || [ -n "$BAD_EXECS" ]; then
@@ -84,7 +86,7 @@ jobs:
               sudo -u nobody test -x "squashfs-root/$f" || { echo "FAIL: nobody cannot execute $f"; exit 1; }
             done
             rm -rf squashfs-root
-            echo "OK: $img is world-traversable/executable (incl. nobody test)"
+            echo "OK: $img mounts/extracts cleanly with catalog runtime and has world-accessible 755 perms"
           done
       - name: Upload Linux bundles
         uses: softprops/action-gh-release@v2
